@@ -9,7 +9,7 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
 export const usersSlice = createSlice({
   name: "users",
   initialState: {
-    items: {},
+    items: [],
   },
   reducers: {},
   extraReducers: {
