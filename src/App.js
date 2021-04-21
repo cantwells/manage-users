@@ -1,17 +1,36 @@
 import { useDispatch, useSelector } from "react-redux";
-import React from 'react';
+import React, { useState } from 'react';
 import "./App.css";
-import { fetchUsers } from "./redux/slices/usersSlice";
+import { fetchUsers, setPage } from "./redux/slices/usersSlice";
 import { AppBar, Avatar, Box, Button, Card, Container, CssBaseline, Grid, IconButton, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import { Delete as DeleteIcon, Edit as EditIcon} from '@material-ui/icons/';
+import { Pagination } from '@material-ui/lab';
 
 function App() {
   const dispatch = useDispatch();
+  const { items: users, currentPage, pageLimit, isLoaded } = useSelector( ({users}) => users );
+  const [ currentUsers, setCurrentUsers ] = useState([]);
+  
   React.useEffect( () => {
     dispatch(fetchUsers());
-  },[dispatch] )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[] );
+  React.useEffect( () => {
+    if(isLoaded){
+      const offset = ( currentPage - 1 ) * pageLimit;
+      setCurrentUsers( users.slice( offset, offset+pageLimit ) )
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[isLoaded] );
 
-  const users = useSelector( ({users}) => users.items );
+
+  const lengthPagination =  Math.ceil(users.length / pageLimit);
+
+  const handleChange = ( e, page ) => {
+    const offset = ( page - 1 ) * pageLimit;
+    setCurrentUsers( users.slice( offset, offset+pageLimit ) )
+    dispatch( setPage({page}) );
+  }
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -41,6 +60,10 @@ function App() {
     },
     text: {
       marginLeft: theme.spacing(2)
+    },
+    pagination: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(1)
     }
   }));
   const classes = useStyles();
@@ -63,11 +86,11 @@ function App() {
             className={classes.cardContaiber}  
         >
           {
-            users.map( (user) => (
+            currentUsers.map( (user) => (
               <Grid item md={8} key={user.id}>
                 <Card className={classes.cardItem}>
                   <Grid container alignItems='center'>
-                    <Avatar className={classes.large}>{user.name.charAt(0)}</Avatar>
+                    <Avatar className={classes.large}>{user.name.charAt(0).toUpperCase()}</Avatar>
                     <Box className={classes.text}>
                       <Typography>{user.name}</Typography>
                       <Typography>{user.surname}</Typography>
@@ -84,6 +107,9 @@ function App() {
               </Grid>
             ))
           }
+        </Grid>
+        <Grid container justify='center' className={classes.pagination}>
+          <Pagination color='primary' count={lengthPagination} page={currentPage} onChange={handleChange}/>
         </Grid>
       </Container>
     </>

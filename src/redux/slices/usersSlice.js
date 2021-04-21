@@ -10,14 +10,25 @@ export const usersSlice = createSlice({
   name: "users",
   initialState: {
     items: [],
+    currentPage: 1,
+    pageLimit: 5,
+    isLoaded: false,
   },
-  reducers: {},
+  reducers: {
+    setPage(state, action) {
+      state.currentPage = action.payload.page;
+    },
+  },
   extraReducers: {
+    [fetchUsers.pending]: (state) => {
+      state.isLoaded = false;
+    },
     [fetchUsers.fulfilled]: (state, action) => {
-      console.log(action.payload);
       state.items = action.payload;
+      state.isLoaded = true;
     },
   },
 });
 
+export const { setPage } = usersSlice.actions;
 export default usersSlice.reducer;
