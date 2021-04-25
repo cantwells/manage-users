@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useReducer, useState } from 'react';
 import "./App.css";
-import { addUser, fetchUsers, setPage } from "./redux/slices/usersSlice";
+import { addUser, deleteUser, fetchUsers, setPage } from "./redux/slices/usersSlice";
 import { AppBar, Avatar, Box, Button, Card, Container, CssBaseline, Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, TextField, Toolbar, Typography } from '@material-ui/core';
 import { Delete as DeleteIcon, Edit as EditIcon} from '@material-ui/icons/';
 import { Pagination } from '@material-ui/lab';
@@ -33,7 +33,7 @@ function App() {
       setCurrentUsers( users.slice( offset, offset+pageLimit ) )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[isLoaded] );
+  },[isLoaded, users] );
 
 //Оброботчие переключения страниц
   const handlePageChange = ( e, page ) => {
@@ -75,6 +75,10 @@ function App() {
     const value = event.target.value;
     setFormData( {[input]: value} )
   }
+//Удаление пользователя
+const handleDelUser = (id) => {
+  dispatch( deleteUser(id) );
+}
 /*==Style for project==*/
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -173,7 +177,7 @@ const getIndex = ( max ) => {
                     <IconButton aria-label="edit">
                       <EditIcon />
                     </IconButton>
-                    <IconButton aria-label="delete">
+                    <IconButton aria-label="delete" onClick={() => handleDelUser(user.id)}>
                       <DeleteIcon />
                     </IconButton>
                 </Card>
