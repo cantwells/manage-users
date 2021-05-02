@@ -1,11 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import React, { useReducer, useState } from 'react';
-import "./App.css";
+import "./index.css";
 import { addUser, deleteUser, fetchUsers, setPage } from "./redux/slices/usersSlice";
-import { AppBar, Avatar, Box, Button, Card, Container, CssBaseline, Dialog, DialogContent, DialogTitle, Grid, IconButton, makeStyles, TextField, Toolbar, Typography } from '@material-ui/core';
-import { Delete as DeleteIcon, Edit as EditIcon} from '@material-ui/icons/';
-import { Pagination } from '@material-ui/lab';
-import { deepOrange, deepPurple, lightBlue, red } from "@material-ui/core/colors";
+import { Header } from "./components/Header";
+import { Card } from "./components/Card";
+import { Pagination } from "./components/Pagination";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,7 +35,7 @@ function App() {
   },[isLoaded, users] );
 
 //Оброботчие переключения страниц
-  const handlePageChange = ( e, page ) => {
+  const handlePageChange = ( page ) => {
     const offset = ( page - 1 ) * pageLimit;
     setCurrentUsers( users.slice( offset, offset+pageLimit ) )
     dispatch( setPage({page}) );
@@ -79,157 +78,64 @@ function App() {
 const handleDelUser = (id) => {
   dispatch( deleteUser(id) );
 }
-/*==Style for project==*/
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    addButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-    cardContaiber: {
-      marginTop: theme.spacing(2)
-    },
-    cardItem: {
-      padding: theme.spacing(2),
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center'
-    },
-    button: {
-      margin: theme.spacing(1),
-    },
-    large: {
-      width: theme.spacing(7),
-      height: theme.spacing(7),
-    },
-    text: {
-      marginLeft: theme.spacing(2)
-    },
-    pagination: {
-      paddingTop: theme.spacing(3),
-      paddingBottom: theme.spacing(1)
-    },
-    inputs: {
-      marginBottom: theme.spacing(2)
-    },
-    orange: {
-      backgroundColor: deepOrange[500]
-    },
-    purple: {
-      backgroundColor: deepPurple[500]
-    },
-    red: {
-      backgroundColor: red[500]
-    },
-    blue: {
-      backgroundColor: lightBlue[500]
-    }
-  }));
+//Редактирование пользователя
+// const handleEditUser = id => {
+//   setOpenForm(true);
+//   const user = users.find( user=> user.id === id);
+//   console.log(user);
+// }
+
 
 //Задаём массив из цветов
-const colors = [ 'orange', 'purple', 'red', 'blue' ];
+const colors = [ 'orange', 'purple', 'red', 'blue', 'green' ];
 
 const getIndex = ( max ) => {
   return Math.floor(Math.random() * max);
 }
 
-  const classes = useStyles();
-
   return (
     <>
-      <CssBaseline />
-      <Container maxWidth="md">
-        <AppBar position="static">
-          <Toolbar disableGutters={false} variant="dense">
-            <Typography variant="h6" className={classes.title}>All Users</Typography>
-            <Button color="inherit" onClick={handleOpenForm} className={classes.addButton}>Add User</Button>
-          </Toolbar>
-        </AppBar>
-      </Container>
-      <Container maxWidth="md">
-        <Grid container
-            justify="center"
-            spacing={2}
-            className={classes.cardContaiber}  
-        >
-          {
-            currentUsers.map( (user) => (
-              <Grid item md={8} key={user.id}>
-                <Card className={classes.cardItem}>
-                  <Grid container alignItems='center'>
-                    {
-                      user.avatar 
-                      ? <Avatar alt={`${user.name} ${user.surname}`} src={user.avatar} />
-                      : <Avatar className={`${classes.large} ${classes[colors[getIndex(colors.length)]]}`} >
-                          {user.name.charAt(0).toUpperCase()}
-                        </Avatar>
-                    }
-                    <Box className={classes.text}>
-                      <Typography>{user.name}</Typography>
-                      <Typography>{user.surname}</Typography>
-                      <Typography>{user.desc}</Typography>
-                    </Box>
-                  </Grid>
-                    <IconButton aria-label="edit">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton aria-label="delete" onClick={() => handleDelUser(user.id)}>
-                      <DeleteIcon />
-                    </IconButton>
-                </Card>
-              </Grid>
-            ))
-          }
-        </Grid>
-        <Grid container justify='center' className={classes.pagination}>
-          <Pagination color='primary' count={lengthPagination} page={currentPage} onChange={handlePageChange}/>
-        </Grid>
-      </Container>
+      <div className="container">
+        <Header onOpenForm={handleOpenForm}/>
+            <div className="cards">
+              {
+                currentUsers.map( (user) => (
+                  <Card key={user.id}
+                        name={user.name} 
+                        surname={user.surname} 
+                        desc={user.desc}
+                        color={ colors[getIndex(colors.length)] }
+                        onDelUser={() => handleDelUser(user.id)} 
+                      />
+                ))
+              }
+        </div>
+      </div>
 
+          <Pagination className='center' count={lengthPagination} page={currentPage} onChange={handlePageChange}/>
     {
       //Модальное окно с формой для добаления пользователя
+      openForm && <div className="overlay modal__add">
+        <div className="modal-content">
+          <h5>Create new user</h5>
+          <form onSubmit={handleSubmit}>
+            <div className="input-field">
+              <input name="name" type="text" placeholder="Name"/>
+            </div>
+            <div className="input-field">
+              <input name="surname" type="text" placeholder="Surname"/>
+            </div>
+            <div className="input-field">
+              <input name="desc" type="text" placeholder="Description"/>
+            </div>
+            <div className="modal-footer">
+              <button onClick={handleCloseForm} className="waves-effect red waves-red btn left">Close</button>
+              <button className="waves-effect waves-green btn right">Add</button>
+            </div>
+          </form>
+        </div>
+      </div>
     }
-      <Dialog open={openForm} onClose={handleCloseForm} maxWidth="xs">
-        <DialogTitle>Create new user</DialogTitle>
-        <DialogContent>
-            <form onSubmit={handleSubmit}>
-              <TextField autoFocus 
-                        label="Name" 
-                        type="text" 
-                        id="name"
-                        name="name" 
-                        variant="outlined"
-                        margin="dense" 
-                        fullWidth
-                        onChange={handleInputChange}
-                        />
-              <TextField label="Surname" 
-                          type="text" 
-                          id="surname"
-                          name="surname"
-                          margin="dense" 
-                          variant="outlined"
-                          fullWidth
-                          onChange={handleInputChange}
-                          />
-              <TextField label="Description" 
-                          type="text" 
-                          id="descr"
-                          name="desc"
-                          margin="dense" 
-                          variant="outlined" 
-                          fullWidth
-                          onChange={handleInputChange}
-                          />
-              <Button onClick={handleCloseForm} color="secondary">Close</Button>
-              <Button type="submit" color="primary">Create</Button>
-            </form>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }
