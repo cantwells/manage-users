@@ -14,7 +14,7 @@ export const Modal = ({ onSubmit, onCloseForm, usrObj }) => {
     resolver: yupResolver(schema),
     defaultValues: usrObj
   }
-    const { register, handleSubmit, formState: {errors} } = useForm(param);
+  const { register, handleSubmit, formState: {errors} } = useForm(param);
   return (
     <div className="overlay modal__add">
       <div className="modal-content">

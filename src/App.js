@@ -16,6 +16,7 @@ function App() {
     dispatch(fetchUsers());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[] );
+
   /*==PAGINATION==*/
   //Получаем количество страниц
   const lengthPagination =  Math.ceil(users.length / pageLimit);
@@ -40,12 +41,13 @@ function App() {
     setCurrentUsers( users.slice( offset, offset+pageLimit ) )
     dispatch( setPage({page}) );
   }
-
+//Объект для хранения данных пользователя для изменения
   const [usrObj, setUsrObj] = useState('');
 
 /*==Form to add user==*/
   const [ openForm, setOpenForm ] = useState(false);
 
+//Обработчики для открытия и закрытия модалки с формой
   const handleOpenForm = () => {
     setOpenForm(true);
   }
@@ -56,13 +58,13 @@ function App() {
       setUsrObj('');
     }
   }
-//Обработчик при отправке формы
+//Обработчик для отправке формы при добавлении пользователя
   const handleAddSubmit = ( data, e ) => {
     dispatch(addUser(data));
     e.target.reset();
     handleCloseForm();
   }
-
+//Обработчик для отправке формы для изменения пользователя
   const handleEditSubmit = ( data, e ) => {
     dispatch(editUser(data));
     e.target.reset();
@@ -79,10 +81,9 @@ const handleEditUser = id => {
   setUsrObj(user);
 }
 
-
 //Задаём массив из цветов
 const colors = [ 'orange', 'purple', 'red', 'blue', 'green' ];
-
+//Возвращаем рендомный цвет
 const getIndex = ( max ) => {
   return Math.floor(Math.random() * max);
 }
