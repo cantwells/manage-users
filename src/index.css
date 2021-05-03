@@ -108,3 +108,6 @@ span.circle {
   bottom: none;
   min-width: 30%;
 }
+.input-field p {
+  color: red;
+}
