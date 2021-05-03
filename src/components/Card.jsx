@@ -1,7 +1,7 @@
 import React from "react";
 import cn from "classnames";
 
-export const Card = React.memo(({ className, name, surname, desc, color, onDelUser }) => {
+export const Card = React.memo(({ className, name, surname, desc, color, onDelUser, onEditUser }) => {
   return (
     <div className="row">
       <div className="offset-m1 offset-l2 col s12 m10 l8">
@@ -17,7 +17,7 @@ export const Card = React.memo(({ className, name, surname, desc, color, onDelUs
             <p>{desc}</p>
           </div>
           <div className="ml-auto">
-            <i className="material-icons">edit</i>
+            <i className="material-icons" onClick={onEditUser}>edit</i>
             <i className="material-icons" onClick={onDelUser}>delete</i>
           </div>
         </div>

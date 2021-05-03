@@ -14,4 +14,7 @@ export const API = {
   deleteUser: (id) => {
     return instance.delete(`/user/${id}`);
   },
+  editUser: (id, name, surname, desc = null, avatar = null) => {
+    return instance.put(`/user/${id}`, { name, surname, desc, avatar });
+  },
 };

@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import React, { useReducer, useState } from 'react';
+import React, { useState } from 'react';
 import "./index.css";
-import { addUser, deleteUser, fetchUsers, setPage } from "./redux/slices/usersSlice";
+import { addUser, deleteUser, fetchUsers, editUser, setPage } from "./redux/slices/usersSlice";
 import { Header } from "./components/Header";
 import { Card } from "./components/Card";
 import { Pagination } from "./components/Pagination";
+import { Modal } from "./components/Modal";
 
 function App() {
   const dispatch = useDispatch();
@@ -25,7 +26,6 @@ function App() {
 показывваем первую страницу с пользователями*/
   React.useEffect( () => {
     if(isLoaded){
-      console.log(users);
       //Определяем начального пользователя для текущего номера страницы
       const offset = ( currentPage - 1 ) * pageLimit;
       //Устанавливаем массив из узеров для вывода на страницу
@@ -41,6 +41,8 @@ function App() {
     dispatch( setPage({page}) );
   }
 
+  const [usrObj, setUsrObj] = useState('');
+
 /*==Form to add user==*/
   const [ openForm, setOpenForm ] = useState(false);
 
@@ -50,40 +52,32 @@ function App() {
 
   const handleCloseForm = () => {
     setOpenForm(false);
-  }
-//Стейт для получения данных из формы
-  const [ formData, setFormData ] = useReducer( ( state, newState) => {
-    return {...state, ...newState}
-  },
-    {
-      "name": "",
-      "surname": "",
-      "desc": "",
-      "avatar": ""
+    if(usrObj){
+      setUsrObj('');
     }
-  )
+  }
 //Обработчик при отправке формы
-  const handleSubmit = ( event ) => {
-    event.preventDefault();
-    dispatch(addUser(formData));
+  const handleAddSubmit = ( data, e ) => {
+    dispatch(addUser(data));
+    e.target.reset();
     handleCloseForm();
   }
-//Получение данных из инпута
-  const handleInputChange = (event) => {
-    const input = event.target.name;
-    const value = event.target.value;
-    setFormData( {[input]: value} )
+
+  const handleEditSubmit = ( data, e ) => {
+    dispatch(editUser(data));
+    e.target.reset();
+    handleCloseForm();
   }
 //Удаление пользователя
 const handleDelUser = (id) => {
   dispatch( deleteUser(id) );
 }
 //Редактирование пользователя
-// const handleEditUser = id => {
-//   setOpenForm(true);
-//   const user = users.find( user=> user.id === id);
-//   console.log(user);
-// }
+const handleEditUser = id => {
+  setOpenForm(true);
+  const user = users.find( user=> user.id === id);
+  setUsrObj(user);
+}
 
 
 //Задаём массив из цветов
@@ -105,7 +99,8 @@ const getIndex = ( max ) => {
                         surname={user.surname} 
                         desc={user.desc}
                         color={ colors[getIndex(colors.length)] }
-                        onDelUser={() => handleDelUser(user.id)} 
+                        onDelUser={() => handleDelUser(user.id)}
+                        onEditUser={() => handleEditUser(user.id)} 
                       />
                 ))
               }
@@ -115,26 +110,7 @@ const getIndex = ( max ) => {
           <Pagination className='center' count={lengthPagination} page={currentPage} onChange={handlePageChange}/>
     {
       //Модальное окно с формой для добаления пользователя
-      openForm && <div className="overlay modal__add">
-        <div className="modal-content">
-          <h5>Create new user</h5>
-          <form onSubmit={handleSubmit}>
-            <div className="input-field">
-              <input name="name" type="text" placeholder="Name"/>
-            </div>
-            <div className="input-field">
-              <input name="surname" type="text" placeholder="Surname"/>
-            </div>
-            <div className="input-field">
-              <input name="desc" type="text" placeholder="Description"/>
-            </div>
-            <div className="modal-footer">
-              <button onClick={handleCloseForm} className="waves-effect red waves-red btn left">Close</button>
-              <button className="waves-effect waves-green btn right">Add</button>
-            </div>
-          </form>
-        </div>
-      </div>
+      openForm && <Modal onSubmit={usrObj ? handleEditSubmit : handleAddSubmit} onCloseForm={handleCloseForm} usrObj={usrObj}/>
     }
     </>
   );

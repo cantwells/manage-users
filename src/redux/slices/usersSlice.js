@@ -31,6 +31,16 @@ export const deleteUser = createAsyncThunk("users/deleteUser", async (id) => {
   }
 });
 
+export const editUser = createAsyncThunk("users/editUser", async (obj) => {
+  const { id, name, surname, desc, avatar } = obj;
+  try {
+    const response = await API.editUser(id, name, surname, desc, avatar);
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
+});
+
 export const usersSlice = createSlice({
   name: "users",
   initialState: {
@@ -52,14 +62,26 @@ export const usersSlice = createSlice({
       state.items = action.payload;
       state.isLoaded = true;
     },
-    [addUser.fulfilled]: (state, action) => {
-      console.log(action.payload);
-    },
+    [addUser.fulfilled]: (state, action) => {},
     [addUser.rejected]: (state, action) => {
-      console.log(action);
+      console.log(action.payload);
     },
     [deleteUser.fulfilled]: (state, action) => {
       state.items = action.payload;
+      if (state.items.length % 5 === 0) {
+        state.currentPage--;
+      }
+    },
+    [editUser.fulfilled]: (state, action) => {
+      state.items = state.items.map((el) => {
+        if (el.id === action.payload.id) {
+          return action.payload;
+        }
+        return el;
+      });
+    },
+    [editUser.rejected]: (state, action) => {
+      console.log(action);
     },
   },
 });
