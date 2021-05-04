@@ -4,7 +4,7 @@ import { Home } from "./components/Home";
 export const App = () => {
   return (
     <BrowserRouter>
-      <Route path="/">
+      <Route path="/:page?">
         <Home />
       </Route>
     </BrowserRouter>
