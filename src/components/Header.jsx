@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Header = ({ onOpenForm }) => {
+export const Header = React.memo(({ onOpenForm }) => {
   return (
     <nav className="px1 indigo">
       <div className="nav-wrapper">
@@ -24,4 +24,4 @@ export const Header = ({ onOpenForm }) => {
       </div>
     </nav>
   );
-};
+});
