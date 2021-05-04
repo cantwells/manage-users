@@ -12,14 +12,40 @@ import { Header } from "./Header";
 import { Card } from "./Card";
 import { Pagination } from "./Pagination";
 import { Modal } from "./Modal";
+import { useHistory, useParams } from "react-router";
 
-export const Home = () => {
+export const Home = React.memo(() => {
+
+  const history = useHistory();
+  //Получаем значение из параметра в url
+  let { page } = useParams();
+  
+  
   const dispatch = useDispatch();
   //Получение данных из стейта
   const { items: users, currentPage, pageLimit, isLoaded } = useSelector(
     ({ users }) => users
-  );
-  //Получаем всех пользователей
+    );
+  /*При запуске приложения, после загрузки пользовтелей, 
+показывваем первую страницу с пользователями*/
+    React.useEffect( () => {
+      //Если параметра нет, то устанавливаем его беря значение из стейта
+      if(!page){
+        history.push(`/${currentPage}`);
+      }else {
+        //Если параметр установлен, то передаём его в стей. Т.к. параметр приходит строкой,
+        //перед тем как передавать его приводим к числу
+        dispatch( setPage({page: +page}) )
+      }
+      if (isLoaded) {
+        //Определяем начального пользователя для текущего номера страницы
+        const offset = (currentPage - 1) * pageLimit;
+        //Устанавливаем массив из узеров для вывода на страницу
+        setCurrentUsers(users.slice(offset, offset + pageLimit));
+      }
+    // eslint-disable-next-line
+    },[isLoaded])
+    //Получаем всех пользователей
   React.useEffect(() => {
     dispatch(fetchUsers());
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -30,18 +56,6 @@ export const Home = () => {
   const lengthPagination = Math.ceil(users.length / pageLimit);
   //Состояние для переключения страниц
   const [currentUsers, setCurrentUsers] = useState([]);
-
-  /*При запуске приложения, после загрузки пользовтелей, 
-показывваем первую страницу с пользователями*/
-  React.useEffect(() => {
-    if (isLoaded) {
-      //Определяем начального пользователя для текущего номера страницы
-      const offset = (currentPage - 1) * pageLimit;
-      //Устанавливаем массив из узеров для вывода на страницу
-      setCurrentUsers(users.slice(offset, offset + pageLimit));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoaded, users]);
 
   //Оброботчие переключения страниц
   const handlePageChange = (page) => {
@@ -133,4 +147,4 @@ export const Home = () => {
       }
     </>
   );
-};
+});

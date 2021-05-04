@@ -1,21 +1,30 @@
 import cn from 'classnames';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-export const Pagination = ({ className, count, page, onChange }) => {
-    const countArr = new Array(count).fill('');
+export const Pagination = React.memo(({ className, count, page, onChange }) => {
+    const countArr = [];
+    for (let i = 1; i <= count; i++) {
+        countArr.push(i);
+    }
     
     return( 
         <ul className={cn('pagination', className)}>
             <li className={ cn({'disabled': page === 1}) } onClick={page > 1 ? () => onChange(page-1) : undefined }>
-                <button>
+                <Link to={ page > 1 ? `/${page-1}` : `/${page}`}>
                     <i className="material-icons">chevron_left</i>
-                </button>
+                </Link>
             </li>            
                 {
-                    countArr.map( (_, idx) => <li key={idx} className={page === idx+1 ? 'active' : 'waves-effect'}  onClick={() => onChange(idx+1)}>
-                        <button>{idx + 1}</button>
+                    countArr.map( (p) => <li key={p} className={page === p ? 'active' : 'waves-effect'}  onClick={() => onChange(p)}>
+                        <Link to={`/${p}`}>{p}</Link>
                     </li> )
                 }
-            <li className={ cn({'disabled': page === count}) }  onClick={page < count ? () => onChange(page+1) : undefined}><button><i className="material-icons">chevron_right</i></button></li>
+            <li className={ cn({'disabled': page === count}) }  onClick={page < count ? () => onChange(page+1) : undefined}>
+                <Link to={ page < count ? `/${page+1}` : `/${page}`}>
+                    <i className="material-icons">chevron_right</i>
+                </Link>
+            </li>
         </ul>
     )
-}
+});
