@@ -59,28 +59,8 @@ span.circle {
   border-radius: 50%;
 }
 
-.pagination li button {
-  line-height: 2rem;
-  border: none;
-  background: white;
-  border-radius: 50%;
-  cursor: pointer;
-  padding: 0 10px;
-}
-
 .pagination li.active {
-  background: white;
-}
-
-.pagination li.active button {
-  background: #3f51b5;
-  color: white;
-  cursor: default;
-}
-
-.pagination li.disabled button {
-  color: #999;
-  cursor: default;
+  background-color: #3f51b5;
 }
 
 .overlay {
