@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
+import PropTypes from 'prop-types';
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -48,3 +49,15 @@ export const Modal = ({ onSubmit, onCloseForm, usrObj }) => {
     </div>
   );
 };
+
+Modal.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  onCloseForm: PropTypes.func.isRequired,
+  usrObj: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.shape({
+      name: PropTypes.string,
+      surname: PropTypes.string,
+      desc: PropTypes.string
+    })])
+}

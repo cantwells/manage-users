@@ -1,6 +1,7 @@
 import cn from 'classnames';
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 export const Pagination = React.memo(({ className, count, page, onChange }) => {
     const countArr = [];
@@ -28,3 +29,10 @@ export const Pagination = React.memo(({ className, count, page, onChange }) => {
         </ul>
     )
 });
+
+Pagination.propTypes = {
+    className: PropTypes.string,
+    count: PropTypes.number.isRequired,
+    page: PropTypes.number.isRequired,
+    onChange: PropTypes.func.isRequired
+}

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 
 export const Header = React.memo(({ onOpenForm }) => {
   return (
@@ -25,3 +26,7 @@ export const Header = React.memo(({ onOpenForm }) => {
     </nav>
   );
 });
+
+Header.propTypes = {
+  onOpenForm: PropTypes.func.isRequired
+}

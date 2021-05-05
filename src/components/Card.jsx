@@ -1,5 +1,6 @@
 import React from "react";
 import cn from "classnames";
+import PropTypes from 'prop-types';
 
 export const Card = React.memo(({ className, name, surname, desc, color, onDelUser, onEditUser }) => {
   return (
@@ -25,3 +26,13 @@ export const Card = React.memo(({ className, name, surname, desc, color, onDelUs
     </div>
   );
 });
+
+Card.propTypes = {
+  className: PropTypes.string,
+  name: PropTypes.string.isRequired,
+  surname: PropTypes.string.isRequired,
+  desc: PropTypes.string,
+  color: PropTypes.string,
+  onDelUser: PropTypes.func,
+  onEditUser: PropTypes.func
+}
