@@ -37,6 +37,9 @@ export const Home = React.memo(() => {
         //перед тем как передавать его приводим к числу
         dispatch( setPage({page: +page}) )
       }
+      // eslint-disable-next-line
+    },[]);
+    React.useEffect( () => {
       if (isLoaded) {
         //Определяем начального пользователя для текущего номера страницы
         const offset = (currentPage - 1) * pageLimit;
@@ -44,7 +47,7 @@ export const Home = React.memo(() => {
         setCurrentUsers(users.slice(offset, offset + pageLimit));
       }
     // eslint-disable-next-line
-    },[isLoaded])
+    },[isLoaded, users, currentPage])
     //Получаем всех пользователей
   React.useEffect(() => {
     dispatch(fetchUsers());
