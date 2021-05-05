@@ -35,13 +35,14 @@ export const Modal = ({ onSubmit, onCloseForm, usrObj }) => {
           </div>
           <div className="modal-footer">
             <button
+              type="button"
               onClick={onCloseForm}
               className="waves-effect red waves-red btn left">Close
             </button>
             {
               usrObj
-              ? <button className="waves-effect waves-green btn right">Edit</button>
-              : <button className="waves-effect waves-green btn right">Add</button>
+              ? <button type="submit" className="waves-effect waves-green btn right">Edit</button>
+              : <button type="submit" className="waves-effect waves-green btn right">Add</button>
             }           
           </div>
         </form>
