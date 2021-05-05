@@ -62,6 +62,10 @@ export const usersSlice = createSlice({
       state.items = action.payload;
       state.isLoaded = true;
     },
+    [fetchUsers.rejected]: (state, action) => {
+      console.log(action);
+    },
+
     [addUser.fulfilled]: (state, action) => {},
     [addUser.rejected]: (state, action) => {
       console.log(action.payload);
