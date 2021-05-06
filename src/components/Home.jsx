@@ -13,6 +13,7 @@ import { Card } from "./Card";
 import { Pagination } from "./Pagination";
 import { Modal } from "./Modal";
 import { useHistory, useParams } from "react-router";
+import { Alert } from "./Alert";
 
 export const Home = React.memo(() => {
 
@@ -23,7 +24,7 @@ export const Home = React.memo(() => {
   
   const dispatch = useDispatch();
   //Получение данных из стейта
-  const { items: users, currentPage, pageLimit, isLoaded } = useSelector(
+  const { items: users, currentPage, pageLimit, isLoaded, error } = useSelector(
     ({ users }) => users
     );
   /*При запуске приложения, после загрузки пользовтелей, 
@@ -117,27 +118,34 @@ export const Home = React.memo(() => {
     <>
       <div className="container">
         <Header onOpenForm={handleOpenForm} />
-        <div className="cards">
-          {currentUsers.map((user) => (
-            <Card
-              key={user.id}
-              name={user.name}
-              surname={user.surname}
-              desc={user.desc}
-              color={colors[getIndex(colors.length)]}
-              onDelUser={() => handleDelUser(user.id)}
-              onEditUser={() => handleEditUser(user.id)}
-            />
-          ))}
-        </div>
+        {
+          error
+          ? <Alert message={error} />
+          : 
+            <>
+              <div className="cards">
+                {currentUsers.map((user) => (
+                  <Card
+                    key={user.id}
+                    name={user.name}
+                    surname={user.surname}
+                    desc={user.desc}
+                    color={colors[getIndex(colors.length)]}
+                    onDelUser={() => handleDelUser(user.id)}
+                    onEditUser={() => handleEditUser(user.id)}
+                  />
+                ))}
+              </div>
+              <Pagination
+                className="center"
+                count={lengthPagination}
+                page={currentPage}
+                onChange={handlePageChange}
+              />
+            </>
+        }
       </div>
 
-      <Pagination
-        className="center"
-        count={lengthPagination}
-        page={currentPage}
-        onChange={handlePageChange}
-      />
       {
         //Модальное окно с формой для добаления пользователя
         openForm && (

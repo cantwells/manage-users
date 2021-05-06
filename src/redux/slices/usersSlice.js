@@ -1,5 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { API } from "../dal/API";
+import {
+  createAsyncThunk,
+  createSlice
+} from "@reduxjs/toolkit";
+import {
+  API
+} from "../dal/API";
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
   const response = await API.getUsers();
@@ -9,7 +14,12 @@ export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
 export const addUser = createAsyncThunk(
   "users/addUser",
   async (obj, thunkAPI) => {
-    const { name, surname, desc, avatar } = obj;
+    const {
+      name,
+      surname,
+      desc,
+      avatar
+    } = obj;
     try {
       const response = await API.addUser(name, surname, desc, avatar);
       if (response.status === 200) {
@@ -32,7 +42,13 @@ export const deleteUser = createAsyncThunk("users/deleteUser", async (id) => {
 });
 
 export const editUser = createAsyncThunk("users/editUser", async (obj) => {
-  const { id, name, surname, desc, avatar } = obj;
+  const {
+    id,
+    name,
+    surname,
+    desc,
+    avatar
+  } = obj;
   try {
     const response = await API.editUser(id, name, surname, desc, avatar);
     return response.data;
@@ -48,6 +64,7 @@ export const usersSlice = createSlice({
     currentPage: 1,
     pageLimit: 5,
     isLoaded: false,
+    error: ''
   },
   reducers: {
     setPage(state, action) {
@@ -63,7 +80,7 @@ export const usersSlice = createSlice({
       state.isLoaded = true;
     },
     [fetchUsers.rejected]: (state, action) => {
-      console.log(action);
+      state.error = action.error.message
     },
 
     [addUser.fulfilled]: (state, action) => {},
@@ -90,5 +107,7 @@ export const usersSlice = createSlice({
   },
 });
 
-export const { setPage } = usersSlice.actions;
+export const {
+  setPage
+} = usersSlice.actions;
 export default usersSlice.reducer;
