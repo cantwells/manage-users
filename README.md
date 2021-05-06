@@ -4,12 +4,12 @@
 
 **Стек:** HTML, CSS, Materialize CSS, React, Redux Toolkit, PropTypes, Axios, React-Router, React-Hook-Form
 
-####Инструкция по запуску:
+#### Инструкция по запуску:
 
 -   Скачать или клонировать проект
 -   Установить зависимости npm install
 -   Запустить в dev режиме npm start
 -   Запустить продакшн сборку проекта npm run build
 
-#####Посмотреть сайт:
+##### Посмотреть сайт:
 [https://cantwells.github.io/manage-users/](https://cantwells.github.io/manage-users/).
