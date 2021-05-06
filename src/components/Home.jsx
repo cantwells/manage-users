@@ -116,35 +116,33 @@ export const Home = React.memo(() => {
 
   return (
     <>
+    {
+      error
+      ? <Alert message={error} />
+      : 
       <div className="container">
         <Header onOpenForm={handleOpenForm} />
-        {
-          error
-          ? <Alert message={error} />
-          : 
-            <>
-              <div className="cards">
-                {currentUsers.map((user) => (
-                  <Card
-                    key={user.id}
-                    name={user.name}
-                    surname={user.surname}
-                    desc={user.desc}
-                    color={colors[getIndex(colors.length)]}
-                    onDelUser={() => handleDelUser(user.id)}
-                    onEditUser={() => handleEditUser(user.id)}
-                  />
-                ))}
-              </div>
-              <Pagination
-                className="center"
-                count={lengthPagination}
-                page={currentPage}
-                onChange={handlePageChange}
-              />
-            </>
-        }
+        <div className="cards">
+          {currentUsers.map((user) => (
+            <Card
+              key={user.id}
+              name={user.name}
+              surname={user.surname}
+              desc={user.desc}
+              color={colors[getIndex(colors.length)]}
+              onDelUser={() => handleDelUser(user.id)}
+              onEditUser={() => handleEditUser(user.id)}
+            />
+          ))}
+        </div>
+        <Pagination
+          className="center"
+          count={lengthPagination}
+          page={currentPage}
+          onChange={handlePageChange}
+        />
       </div>
+    }
 
       {
         //Модальное окно с формой для добаления пользователя
