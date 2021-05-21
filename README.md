@@ -13,4 +13,4 @@
 
 ##### Посмотреть сайт:
 
-[https://cantwells.github.io/manage-users/](https://cantwells.github.io/manage-users/).
+[https://rjazantsev.github.io/manage-users/](https://rjazantsev.github.io/manage-users/).

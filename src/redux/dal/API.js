@@ -1,9 +1,7 @@
 import axios from "axios";
 
-const CORS = 'https://cors-anywhere.herokuapp.com/';
-
 const instance = axios.create({
-  baseURL: `${CORS}http://77.120.241.80:8811/api`,
+  baseURL: `http://77.120.241.80:8811/api`,
 });
 
 export const API = {
