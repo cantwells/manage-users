@@ -10,7 +10,3 @@
 -   Установить зависимости npm install
 -   Запустить в dev режиме npm start
 -   Запустить продакшн сборку проекта npm run build
-
-##### Посмотреть сайт:
-
-[https://rjazantsev.github.io/manage-users/](https://rjazantsev.github.io/manage-users/).
